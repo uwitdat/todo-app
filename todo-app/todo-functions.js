@@ -55,24 +55,33 @@ const todosHeading = () => {
 
 //Return Dom elements for matching todos
 const findMatchingTodo = (searchedTodo, filteredTodos) => {
+
     searchedTodo.forEach(todo => {
+        //defining checkbbox
+        let checkbox = document.createElement('INPUT')
+        checkbox.setAttribute('type', 'checkbox')
+
+        //check if todo.completed upon render
+        checkboxIsChecked(todo, checkbox)
 
         let div = document.createElement('div')
         let p = document.createElement('p')
         p.style.display = 'inline'
         p.style.margin = '1rem'
 
-        let checkbox = document.createElement('INPUT')
-        checkbox.setAttribute('type', 'checkbox')
+        //checkbox toggle
+        checkbox.addEventListener('change', () => {
+            checkboxToggle(todo.id)
+        })
+
         let deleteBtn = document.createElement('button')
         deleteBtn.textContent = 'x'
 
+        //delete btn
         deleteBtn.addEventListener('click', () => {
             removeTodo(todo.id)
             saveTodos(todos)
             searchTodos(todos, filteredTodos)
-
-
         })
 
         if (filteredTodos.completed && todo.completed !== true) {
@@ -82,6 +91,25 @@ const findMatchingTodo = (searchedTodo, filteredTodos) => {
             appendElements(todo, p, div, checkbox, deleteBtn)
         }
     })
+}
+
+
+//checkboxischecked
+const checkboxIsChecked = (todo, checkbox) => {
+    todo.completed ? checkbox.checked = true : checkbox.checked = false
+}
+
+//Checkbox Toggle 
+const checkboxToggle = (id) => {
+    const todo = todos.find(todo => {
+        return todo.id === id
+    })
+
+    todo.completed = !todo.completed
+
+    //RE SAVE RE RENDER
+    saveTodos(todos)
+    searchTodos(todos, filteredTodos)
 }
 
 //Remove todo

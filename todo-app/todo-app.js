@@ -1,6 +1,7 @@
 let todos = fetchTodos()
 
 const filteredTodos = {
+    id: '',
     text: '',
     completed: false
 }

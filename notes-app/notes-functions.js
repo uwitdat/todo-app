@@ -29,7 +29,8 @@ const removeNote = (id) => {
 
 // Generate the DOM structure for a note
 const generateNoteDom = (note) => {
-    const noteEl = document.createElement('p')
+    const noteEl = document.createElement('a')
+    noteEl.style.display = 'block';
     const button = document.createElement('button')
 
     button.textContent = 'x'
@@ -44,15 +45,50 @@ const generateNoteDom = (note) => {
     } else {
         noteEl.textContent = 'Unnamed Note'
     }
-
+    noteEl.setAttribute('href', `/notes-app/edit.html#${note.id}`)
     noteEl.prepend(button)
 
     return noteEl;
 }
 
+//Sort notes
+const sortNotes = (notes, sortBy) => {
+    if (sortBy === 'byEdited') {
+        return notes.sort((a, b) => {
+            if (a.updatedAt > b.updatedAt) {
+                return -1
+            } else if (a.updatedAt < b.updatedAt) {
+                return 1
+            } else {
+                return 0
+            }
+        })
+    } else if (sortBy === 'byCreated') {
+        return notes.sort((a, b) => {
+            if (a.createdAt > b.createdAt) {
+                return -1
+            } else if (a.createdAt < b.createdAt) {
+                return 1
+            } else {
+                return 0
+            }
+        })
+    } else if (sortBy === 'alphabetical') {
+        return notes.sort((a, b) => {
+            if (a.title.toLowerCase() < b.title.toLowerCase()) {
+                return -1
+            } else if (a.title.toLowerCase() > b.title.toLowerCase()) {
+                return 1
+            } else {
+                return 0
+            }
+        })
+    }
+}
 
 // Render application notes
 const renderNotes = (notes, filters) => {
+    notes = sortNotes(notes, filters.sortBy)
     const filteredNotes = notes.filter((note) => {
         return note.title.toLowerCase().includes(filters.searchText.toLowerCase())
     })
@@ -63,4 +99,10 @@ const renderNotes = (notes, filters) => {
         const noteEl = generateNoteDom(note)
         document.querySelector('#notes').appendChild(noteEl)
     })
+}
+
+
+//generate lastedited message
+const generateLastEdited = (timestamp) => {
+    return `last edited: ${moment(timestamp).fromNow()}`
 }

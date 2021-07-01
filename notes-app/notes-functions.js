@@ -1,26 +1,28 @@
+const processData = () => {
+    data = '12323123'
+}
+
+
+
+
 // Read exisiting notes from localStorage
 const getSavedNotes = () => {
     const notesJSON = localStorage.getItem('notes')
-
-    if (notesJSON !== null) {
-        return JSON.parse(notesJSON)
-    } else {
+    try {
+        return notesJSON ? JSON.parse(notesJSON) : []
+    } catch (err) {
         return []
     }
 }
-
 
 // Save a note
 const saveNotes = (notes) => {
     localStorage.setItem('notes', JSON.stringify(notes))
 }
 
-
 //Remove a note 
 const removeNote = (id) => {
-    const noteIndex = notes.findIndex(note => {
-        return note.id === id
-    })
+    const noteIndex = notes.findIndex((note) => note.id === id)
 
     if (noteIndex > -1) {
         notes.splice(noteIndex, 1)
@@ -45,7 +47,7 @@ const generateNoteDom = (note) => {
     } else {
         noteEl.textContent = 'Unnamed Note'
     }
-    noteEl.setAttribute('href', `/notes-app/edit.html#${note.id}`)
+    noteEl.setAttribute('href', `/edit.html#${note.id}`)
     noteEl.prepend(button)
 
     return noteEl;

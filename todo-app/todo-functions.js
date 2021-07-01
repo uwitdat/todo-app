@@ -1,9 +1,10 @@
 //Fetch todos from localStorage
 const fetchTodos = () => {
     const todosJSON = localStorage.getItem('todos')
-    if (todosJSON !== null) {
-        return JSON.parse(todosJSON)
-    } else {
+
+    try {
+        return todosJSON !== null ? JSON.parse(todosJSON) : []
+    } catch (err) {
         return []
     }
 }

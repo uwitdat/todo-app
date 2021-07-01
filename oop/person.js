@@ -2,6 +2,6 @@ const person = function () {
 
 }
 
-const me = person()
+const me = new person()
 
 console.log(me)

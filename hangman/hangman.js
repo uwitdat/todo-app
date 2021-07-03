@@ -1,59 +1,72 @@
-const Hangman = function (word, guesses) {
+//PROTOTYPAL  INHERITANCE
+
+class Hangman {
+  constructor(word, guesses) {
     this.word = word.toLowerCase().split('')
     this.guesses = guesses
     this.guessedLtrs = []
     this.status = 'playing'
     this.ltrsRemain = word.length
-}
+  }
 
-Hangman.prototype.getPuzzle = function () {
+  getPuzzle() {
     let puzzle = ''
     this.word.forEach((ltr) => {
-        if (this.guessedLtrs.includes(ltr) || ltr === ' ') {
-            puzzle += ltr
-        } else {
-            puzzle += '*'
-        }
+      if (this.guessedLtrs.includes(ltr) || ltr === ' ') {
+        puzzle += ltr
+      } else {
+        puzzle += '*'
+      }
     })
     return puzzle
-}
+  }
 
-Hangman.prototype.makeGuess = function (guess) {
-    guess = guess.toLowerCase()
-    isUnique = this.guessedLtrs.includes(guess)
+  getStatus() {
+    const finished = this.word.every((ltr) => this.guessedLtrs.includes(ltr) || ltr === ' ')
 
-    if (isUnique) {
-        console.log('already guessed')
+    if (this.guesses === 0) {
+      this.status = 'failed'
+    }
+    if (finished) {
+      this.status = 'finished'
     } else {
-        this.guessedLtrs.push(guess)
+      return
+    }
+  }
+
+  gameMessage() {
+    const h1 = document.querySelector('#status')
+    if (this.status === 'playing') {
+      h1.textContent = `Guesses remaining: ${game1.guesses}`
+    } if (this.status === 'failed') {
+      h1.textContent = `Nice try! the word was ${this.word.join('')}`
+    } if (this.status === 'finished') {
+      h1.textContent = `Great work! You guessed the word!`
+    }
+  }
+
+  makeGuess(guess) {
+    guess = guess.toLowerCase()
+    let isUnique = this.guessedLtrs.includes(guess)
+
+    let gameState = true
+
+    this.status === 'playing' ? gameState : gameState = false;
+
+    if (isUnique && gameState) {
+    } else {
+      this.guessedLtrs.push(guess)
     }
 
-    if (this.word.includes(guess) && !isUnique) {
-        console.log('correct guess')
-        this.ltrsRemain--
-        console.log(this.ltrsRemain)
-    } else if (!this.word.includes(guess) && !isUnique) {
-        console.log('INcorrect guess')
-        this.guesses--
+    if (this.word.includes(guess) && !isUnique && gameState) {
+      this.ltrsRemain--
+
+    } else if (!this.word.includes(guess) && !isUnique && gameState) {
+      this.guesses--
     }
     this.getStatus()
+    this.gameMessage()
+  }
 }
-
-Hangman.prototype.getStatus = function () {
-    if (this.guesses === 0) {
-        this.status = 'failed'
-        console.log('failed')
-    }
-    if (this.ltrsRemain === 0) {
-        this.status = 'finished'
-        console.log('finished')
-
-    } else {
-        console.log('playing')
-    }
-}
-
-const gameOne = new Hangman('Cat', 2)
-
 
 
